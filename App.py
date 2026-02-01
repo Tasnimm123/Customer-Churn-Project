@@ -5,7 +5,7 @@ import numpy as np
 
 # 1. Load the pre-trained model and scaler
 # Make sure model.pkl and scaler.pkl are in the same directory as this script
-model = joblib.load('gradient_boosting_churn_model.pkl') # اعدلي الاسم هنا
+model = joblib.load('gradient_boosting_churn_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
 # 2. Set App Title and Description
@@ -59,3 +59,4 @@ if st.button("Predict"):
     else:
         st.success("Prediction: The customer is likely to STAY (Not Churn)")
       
+
