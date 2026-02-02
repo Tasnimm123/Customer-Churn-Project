@@ -132,6 +132,13 @@ Due to class imbalance, **recall and F1-score were prioritized over accuracy** w
 ## 🚀 Deployment
 The final model was deployed using **Streamlit** to allow interactive churn prediction.
 
+Notes:
+1️⃣ Accuracy is not sufficient for churn prediction due to class imbalance.
+2️⃣ Recall is more important because missing churned customers leads to business loss.
+3️⃣ SMOTE was applied only on training data to avoid data leakage.
+4️⃣ Gradient Boosting performs well on structured tabular data.
+5️⃣ The model was deployed using Streamlit to make it accessible
+
 
 
 
