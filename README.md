@@ -1,164 +1,155 @@
+# 📊 Customer Churn Prediction
 
-📊 Customer Churn Prediction Project
-📌 Project Overview
-
-This project aims to predict customer churn using Machine Learning techniques.
+## 📌 Project Overview
+This project aims to predict customer churn using Machine Learning techniques.  
 Customer churn prediction is a critical business problem, as retaining existing customers is more cost-effective than acquiring new ones.
 
-The main objective of this project is to identify customers who are likely to leave the company, allowing the business to take proactive retention actions.
+The goal of this project is to identify customers who are likely to leave the company, enabling proactive retention strategies.
 
-🎯 Business Objective
+---
 
-In churn prediction, the most important goal is:
+## 🎯 Business Objective
 
-Identifying as many churned customers as possible.
+In churn prediction, the primary objective is:
 
-For this reason, this project focuses more on Recall rather than Accuracy.
+> **Identifying as many churned customers as possible.**
 
-Missing a churned customer (False Negative) is more costly than incorrectly predicting that a customer will churn.
+For this reason, this project prioritizes **Recall** over Accuracy.
 
-📂 Dataset Description
+Missing a churned customer (**False Negative**) has a higher business cost than incorrectly predicting churn (**False Positive**).
 
-The dataset contains customer information such as:
+---
 
-Credit Score
+## 📂 Dataset Description
 
-Geography (Country)
+The dataset includes the following customer attributes:
 
-Gender
+- Credit Score  
+- Geography (Country)  
+- Gender  
+- Age  
+- Tenure  
+- Balance  
+- Number of Products  
+- Has Credit Card  
+- Is Active Member  
+- Estimated Salary  
 
-Age
+**Target Variable:**
+- `Exited`
+  - `1` → Customer Churned  
+  - `0` → Customer Stayed  
 
-Tenure
+---
 
-Balance
+## ⚙️ Project Workflow
 
-Number of Products
+### 1️⃣ Data Preprocessing
+- Checked for missing values
+- Encoded categorical variables using `OneHotEncoder` (scikit-learn)
+- Split data into training and testing sets
+- Applied feature scaling using `StandardScaler`
 
-Has Credit Card
+---
 
-Is Active Member
+### 2️⃣ Handling Imbalanced Data
+The dataset was imbalanced.  
+To address this issue:
 
-Estimated Salary
+- Applied **SMOTE (Synthetic Minority Oversampling Technique)**
+- SMOTE was applied **only on training data** to prevent data leakage
 
-Target Variable:
+---
 
-Exited
+### 3️⃣ Modeling
 
-1 → Customer Churned
+The following models were trained and evaluated:
 
-0 → Customer Stayed
+- Logistic Regression  
+- Random Forest  
+- Gradient Boosting  
 
-⚙️ Project Workflow
-1️⃣ Data Preprocessing
+After comparison, **Gradient Boosting** achieved the best performance.
 
-Checked for missing values
+---
 
-Encoded categorical variables using OneHotEncoder (sklearn)
-
-Split data into training and testing sets
-
-Applied feature scaling using StandardScaler
-
-2️⃣ Handling Imbalanced Data
-
-The dataset was imbalanced, so I applied:
-
-SMOTE (Synthetic Minority Oversampling Technique)
-Applied only on training data to avoid data leakage.
-
-3️⃣ Modeling
-
-The following classification models were tested:
-
-Logistic Regression
-
-Random Forest
-
-Gradient Boosting
-
-After evaluation, Gradient Boosting provided strong performance.
-
-4️⃣ Model Evaluation
+### 4️⃣ Model Evaluation
 
 The model was evaluated using:
 
-Confusion Matrix
+- Confusion Matrix  
+- Accuracy  
+- Precision  
+- Recall  
+- F1-Score  
 
-Accuracy
+However, since the business objective is to detect churned customers, **Recall was considered the most important metric**.
 
-Precision
+---
 
-Recall
+## 📈 ROC Curve & Threshold Optimization
 
-F1-Score
+Instead of relying on the default classification threshold (0.5), the ROC Curve was used to:
 
-However, since the business goal is to detect churn customers, Recall was prioritized over Accuracy.
+- Analyze performance across different thresholds
+- Calculate AUC Score
+- Select an optimal threshold using Youden’s J statistic
 
-📈 ROC Curve & Threshold Optimization
+This approach helped improve Recall performance.
 
-Instead of using the default classification threshold (0.5), I used:
+---
 
-ROC Curve
+## ✅ Final Model Performance
 
-AUC Score
+After ROC-based threshold tuning:
 
-Threshold Optimization (Youden’s J statistic)
+- 🎯 **Recall: 79%**
+- Accuracy slightly decreased but remained acceptable
+- The model successfully identifies the majority of churn customers
 
-This helped select a better threshold that improves Recall performance.
+This aligns with the business goal of minimizing customer loss.
 
-✅ Final Model Performance
+---
 
-After applying ROC-based threshold tuning:
-
-🎯 Recall: 79%
-
-Accuracy decreased slightly but remained acceptable
-
-The model successfully identifies most churn customers
-
-This result aligns with the business objective, where detecting churn is more important than maximizing overall accuracy.
-
-🧠 Why Recall Matters More Than Accuracy
+## 🧠 Why Recall Matters More Than Accuracy
 
 In churn prediction:
 
-False Negative → A customer leaves and we fail to detect it ❌ (High business cost)
-
-False Positive → We predict churn but customer stays ⚠ (Lower cost)
+- **False Negative** → Customer leaves without being detected ❌ (High business impact)  
+- **False Positive** → Customer predicted to churn but stays ⚠ (Lower impact)  
 
 Therefore:
 
-Improving Recall is more important than maximizing Accuracy in this project.
+> Optimizing Recall is more important than maximizing Accuracy in this project.
 
-🛠 Tools & Libraries
+---
 
-Python
+## 🛠 Tools & Technologies
 
-Pandas
+- Python  
+- Pandas  
+- NumPy  
+- Scikit-learn  
+- Matplotlib  
+- Imbalanced-learn (SMOTE)  
 
-NumPy
+---
 
-Scikit-learn
+## 🚀 Key Takeaways
 
-Matplotlib
+- Handling imbalanced data significantly improves model performance.
+- Accuracy alone is not reliable in imbalanced classification problems.
+- ROC Curve helps optimize classification threshold.
+- Business understanding is essential when evaluating ML models.
 
-Imbalanced-learn (SMOTE)
+---
 
-🚀 Key Takeaways
+## 📌 Conclusion
 
-Handling imbalanced data significantly improves model performance.
+This project demonstrates how Machine Learning can be applied to solve real-world business problems.
 
-Accuracy alone is not reliable for imbalanced classification problems.
+By prioritizing **Recall (79%)** instead of Accuracy, the final model better supports the business objective of reducing customer churn and minimizing revenue loss.
 
-ROC Curve helps optimize classification threshold.
-
-Business understanding is essential when evaluating ML models.
-
-📌 Conclusion
-
-This project demonstrates how Machine Learning can solve real business problems.
-By focusing on Recall (79%) instead of Accuracy, the final model better serves the business objective of minimizing customer churn and reducing revenue loss.
 
 Notes:
 1️⃣ Accuracy is not sufficient for churn prediction due to class imbalance.
