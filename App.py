@@ -31,17 +31,23 @@ df = load_data()
 # ------------------------------
 # Load Model (Safe Way)
 # ------------------------------
+#def load_model():
+    #model_path = "model.pkl"
+
+    #if not os.path.exists(model_path):
+    #    st.error("❌ model.pkl file not found in project folder.")
+    #    st.stop()
+
+    #with open(model_path, "rb") as file:
+    #    model = pickle.load(file)
+
+    #return model
+
+@st.cache_resource
 def load_model():
-    model_path = "model.pkl"
-
-    if not os.path.exists(model_path):
-        st.error("❌ model.pkl file not found in project folder.")
-        st.stop()
-
-    with open(model_path, "rb") as file:
-        model = pickle.load(file)
-
-    return model
+    with open("churn_pipeline.pkl", "rb") as f:
+        model = pickle.load(f)
+        return model
 
 model = load_model()
 
@@ -82,9 +88,9 @@ with tab1:
     st.dataframe(df.describe())
 
     # Extra Statistics
-    avg_salary = df["EstimatedSalary"].mean()
-    median_salary = df["EstimatedSalary"].median()
-    churn_rate = df["Exited"].mean()
+    avg_salary = df["estimated_salary"].mean()
+    median_salary = df["estimated_salary"].median()
+    churn_rate = df["churn"].mean()
     RPI = (1 - churn_rate) * 100
 
     st.subheader("Key Metrics")
@@ -100,7 +106,7 @@ with tab1:
     st.subheader("Churn Distribution")
 
     fig1, ax1 = plt.subplots()
-    sns.countplot(x="Exited", data=df, ax=ax1)
+    sns.countplot(x="churn", data=df, ax=ax1)
     st.pyplot(fig1)
 
     st.markdown("This chart shows the number of customers who stayed vs left.")
@@ -108,7 +114,7 @@ with tab1:
     st.subheader("Age Distribution by Churn")
 
     fig2, ax2 = plt.subplots()
-    sns.histplot(df, x="Age", hue="Exited", kde=True, ax=ax2)
+    sns.histplot(df, x="age", hue="churn", kde=True, ax=ax2)
     st.pyplot(fig2)
 
     st.markdown("Older customers show higher churn probability.")
@@ -116,7 +122,7 @@ with tab1:
     st.subheader("Balance vs Churn")
 
     fig3, ax3 = plt.subplots()
-    sns.boxplot(x="Exited", y="Balance", data=df, ax=ax3)
+    sns.boxplot(x="churn", y="balance", data=df, ax=ax3)
     st.pyplot(fig3)
 
     st.markdown("Customers with higher balances may have different churn behavior.")
@@ -131,10 +137,10 @@ with tab2:
     col1, col2 = st.columns(2)
 
     with col1:
-        credit_score = st.number_input("Credit Score", 300, 900, 600)
-        age = st.number_input("Age", 18, 100, 30)
-        tenure = st.number_input("Tenure (Years)", 0, 20, 5)
-        balance = st.number_input("Balance", 0.0, 300000.0, 0.0)
+        credit_score = st.number_input("credit_score", 300, 900, 600)
+        age = st.number_input("age", 18, 100, 30)
+        tenure = st.number_input("tenure (Years)", 0, 20, 5)
+        balance = st.number_input("balance", 0.0, 300000.0, 0.0)
 
     with col2:
         num_products = st.number_input("Number of Products", 1, 4, 1)
@@ -142,26 +148,21 @@ with tab2:
         is_active = st.selectbox("Is Active Member", [0, 1])
         estimated_salary = st.number_input("Estimated Salary", 0.0, 200000.0, 50000.0)
 
-    geography = st.selectbox("Geography", df["Geography"].unique())
-    gender = st.selectbox("Gender", df["Gender"].unique())
+    country = st.selectbox("country", df["country"].unique())
+    gender = st.selectbox("gender", df["gender"].unique())
 
-    # Encoding (safe dynamic encoding)
-    geo_map = {g: i for i, g in enumerate(df["Geography"].unique())}
-    gender_map = {g: i for i, g in enumerate(df["Gender"].unique())}
 
-    geo_encoded = geo_map[geography]
-    gender_encoded = gender_map[gender]
+    input_data = pd.DataFrame({
+    "credit_score": [credit_score],
+    "age": [age],
+    "balance": [balance],
+    "tenure": [tenure],
+    "products_number": [num_products],
+    "estimated_salary": [estimated_salary],
+    "country": [country],
+    "gender": [gender]
+})
 
-    input_data = np.array([[credit_score,
-                            geo_encoded,
-                            gender_encoded,
-                            age,
-                            tenure,
-                            balance,
-                            num_products,
-                            has_card,
-                            is_active,
-                            estimated_salary]])
 
     if st.button("Predict"):
 
